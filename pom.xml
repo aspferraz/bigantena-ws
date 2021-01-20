@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <inceptionYear>2017</inceptionYear> 
+  <parent>
+      <groupId>com.bigantena</groupId>
+      <artifactId>bigantena</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.bigantena</groupId>
+  <artifactId>bigantena-ws</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>bigantena-ws</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+      <springsecurity.version>4.1.1.RELEASE</springsecurity.version>
+      <springsecurityoauth2.version>2.0.10.RELEASE</springsecurityoauth2.version>
+      <springframework.version>5.0.2.RELEASE</springframework.version>
+      
+      <jetty.home>/opt/jetty9/webapps</jetty.home>
+  </properties>
+  <dependencies>
+        
+      <dependency>
+          <groupId>com.bigantena</groupId>
+          <artifactId>bigantena-base</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+    
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.1.0</version>
+        <scope>provided</scope>
+    </dependency>
+    
+    <!-- Spring -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${springframework.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${springframework.version}</version>
+    </dependency>
+    <dependency>  
+        <groupId>org.springframework</groupId>  
+        <artifactId>spring-webmvc</artifactId>  
+        <version>${springframework.version}</version>  
+    </dependency>   
+    
+    
+    <!-- Spring Security -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${springsecurity.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${springsecurity.version}</version>
+    </dependency>
+    
+    <!-- Spring Security OAuth2-->
+    <dependency>
+        <groupId>org.springframework.security.oauth</groupId>
+        <artifactId>spring-security-oauth2</artifactId>
+        <version>${springsecurityoauth2.version}</version>
+    </dependency>
+    
+  </dependencies>
+  
+  <build>
+    <finalName>bigantena-ws</finalName>
+    <plugins>
+        <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.2.11.v20150529</version>
+            <configuration>
+                <stopPort>9966</stopPort>
+                <stopKey>jetty-stop</stopKey>
+                <scanIntervalSeconds>10</scanIntervalSeconds>
+                <webApp>
+                    <contextPath>/bigantena</contextPath>
+                </webApp>
+                <httpConnector>
+          	     <port>8088</port>
+        	</httpConnector>
+            </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <configuration>
+                <tasks>
+                  <copy todir="${jetty.home}\webapps">
+                    <fileset dir="${basedir}\target" includes="**/*.war" />
+                  </copy>
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+    </plugins>
+  </build>
+</project>
